@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Storyfil — storyboards et process reliés</title>
+<meta name="description" content="Créez des storyboards et des process reliés par des fils : images, vidéos, vidéos TikTok, Instagram et Facebook. Envoyez un lien d'aperçu à qui vous voulez.">
+<meta name="theme-color" content="#070a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%23818cf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%23070a12'/%3E%3Cpath d='M20 22c14 0 10 20 24 20' fill='none' stroke='url(%23g)' stroke-width='4' stroke-linecap='round'/%3E%3Crect x='9' y='15' width='16' height='14' rx='4' fill='%2322d3ee'/%3E%3Crect x='39' y='35' width='16' height='14' rx='4' fill='%23818cf8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="storyboard.css">
+</head>
+<body class="edit">
+
+<!-- Icônes -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="sf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#818cf8"/></linearGradient>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-scene" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 5l-2 5M13 5l-2 5M18 5l-2 5"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+    <symbol id="i-step" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/></symbol>
+    <symbol id="i-diamond" viewBox="0 0 24 24"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z"/></symbol>
+    <symbol id="i-pill" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="5"/></symbol>
+    <symbol id="i-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v9l-7 7H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 21v-5a2 2 0 0 1 2-2h5"/></symbol>
+    <symbol id="i-text" viewBox="0 0 24 24"><path d="M5 7V4h14v3M12 4v16M9 20h6"/></symbol>
+    <symbol id="i-zone" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke-dasharray="3.2 2.6"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-curve" viewBox="0 0 24 24"><path d="M4 19c9 0 7-14 16-14"/></symbol>
+    <symbol id="i-straight" viewBox="0 0 24 24"><path d="M4 19 20 5"/></symbol>
+    <symbol id="i-elbow" viewBox="0 0 24 24"><path d="M4 19h7V5h9"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h15l-4-4M20 16H5l4 4"/></symbol>
+    <symbol id="i-chain" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><path d="M7.5 12h9"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17h.01"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+    <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></symbol>
+    <symbol id="i-front" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M4 16V5a2 2 0 0 1 2-2h11"/></symbol>
+    <symbol id="i-al-left" viewBox="0 0 24 24"><path d="M4 3v18M8 7h10v4H8zM8 14h6v4H8z"/></symbol>
+    <symbol id="i-al-center" viewBox="0 0 24 24"><path d="M12 3v18M6 7h12v4H6zM8 14h8v4H8z"/></symbol>
+    <symbol id="i-al-right" viewBox="0 0 24 24"><path d="M20 3v18M6 7h10v4H6zM10 14h6v4h-6z"/></symbol>
+    <symbol id="i-al-top" viewBox="0 0 24 24"><path d="M3 4h18M7 8h4v10H7zM14 8h4v6h-4z"/></symbol>
+    <symbol id="i-al-middle" viewBox="0 0 24 24"><path d="M3 12h18M7 6h4v12H7zM14 8h4v8h-4z"/></symbol>
+    <symbol id="i-al-bottom" viewBox="0 0 24 24"><path d="M3 20h18M7 6h4v10H7zM14 10h4v6h-4z"/></symbol>
+    <symbol id="i-dist-h" viewBox="0 0 24 24"><path d="M4 3v18M20 3v18M10 8h4v8h-4z"/></symbol>
+    <symbol id="i-dist-v" viewBox="0 0 24 24"><path d="M3 4h18M3 20h18M8 10h8v4H8z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><rect x="11" y="11" width="7" height="6" rx="1"/></symbol>
+    <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="4" width="6" height="5" rx="1"/><rect x="15" y="15" width="6" height="5" rx="1"/><path d="M9 6.5h6M18 9v6"/></symbol>
+    <symbol id="i-row" viewBox="0 0 24 24"><rect x="2" y="8" width="5" height="8" rx="1"/><rect x="9.5" y="8" width="5" height="8" rx="1"/><rect x="17" y="8" width="5" height="8" rx="1"/></symbol>
+    <symbol id="i-gridl" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M10 4v16"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5A8 8 0 1 1 21 12z"/></symbol>
+  </defs>
+</svg>
+
+<!-- Plan de travail -->
+<main id="stage" aria-label="Plan de travail">
+  <div id="world">
+    <div id="zones"></div>
+    <svg id="edges"></svg>
+    <div id="labels"></div>
+    <div id="nodes"></div>
+    <svg id="temp"></svg>
+  </div>
+  <div id="marquee" hidden></div>
+  <div id="empty" class="empty-state" hidden>
+    <p class="es-title">Plan de travail vide</p>
+    <p class="es-sub">Ajoutez une scène avec la barre d'outils, collez un lien TikTok, Instagram ou Facebook (Ctrl+V), ou glissez vos images et vidéos ici.</p>
+  </div>
+</main>
+
+<!-- Barre du haut -->
+<header class="topbar glass">
+  <div class="tb-left">
+    <button class="ib edit-only" id="btn-drawer" title="Mes storyboards" aria-label="Mes storyboards"><svg class="ic"><use href="#i-menu"/></svg></button>
+    <a class="brand" href="./" title="Storyfil">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><path d="M20 22c14 0 10 20 24 20" fill="none" stroke="url(#sf-grad)" stroke-width="4" stroke-linecap="round"/><rect x="9" y="15" width="16" height="14" rx="4" fill="#22d3ee"/><rect x="39" y="35" width="16" height="14" rx="4" fill="#818cf8"/></svg>
+      <span class="brand-name">Storyfil</span>
+    </a>
+    <input id="title" class="title-input edit-only" maxlength="120" spellcheck="false" aria-label="Titre du storyboard">
+    <span id="vtitle" class="title-view view-only"></span>
+    <span id="dur-chip" class="dur-chip" hidden title="Durée totale des scènes"></span>
+  </div>
+  <div class="tb-right">
+    <button class="ib edit-only" id="btn-undo" title="Annuler (Ctrl+Z)" aria-label="Annuler"><svg class="ic"><use href="#i-undo"/></svg></button>
+    <button class="ib edit-only" id="btn-redo" title="Rétablir (Ctrl+Y)" aria-label="Rétablir"><svg class="ic"><use href="#i-redo"/></svg></button>
+    <span class="sep edit-only"></span>
+    <button class="btn ghost" id="btn-list" title="Vue liste : toutes les scènes dans l'ordre"><svg class="ic"><use href="#i-list"/></svg><span class="lbl">Liste</span></button>
+    <button class="btn ghost" id="btn-present" title="Présenter : suivre le parcours étape par étape"><svg class="ic"><use href="#i-play"/></svg><span class="lbl">Présenter</span></button>
+    <button class="btn primary edit-only" id="btn-share"><svg class="ic"><use href="#i-share"/></svg><span class="lbl">Partager</span></button>
+    <button class="btn primary view-only" id="btn-copy" hidden><svg class="ic"><use href="#i-copy"/></svg><span class="lbl">Copier et modifier</span></button>
+  </div>
+</header>
+
+<!-- Outils -->
+<nav class="tools glass edit-only" aria-label="Outils">
+  <button class="tool" data-tool="scene" data-tip="Scène  (S)"><svg class="ic"><use href="#i-scene"/></svg></button>
+  <button class="tool" data-tool="link" data-tip="Vidéo par lien  (L)"><svg class="ic"><use href="#i-link"/></svg></button>
+  <button class="tool" data-tool="file" data-tip="Importer images / vidéos  (I)"><svg class="ic"><use href="#i-upload"/></svg></button>
+  <span class="tsep"></span>
+  <button class="tool" data-tool="step" data-tip="Étape  (E)"><svg class="ic"><use href="#i-step"/></svg></button>
+  <button class="tool" data-tool="decision" data-tip="Décision  (D)"><svg class="ic"><use href="#i-diamond"/></svg></button>
+  <button class="tool" data-tool="start" data-tip="Début / fin"><svg class="ic"><use href="#i-pill"/></svg></button>
+  <button class="tool" data-tool="note" data-tip="Note  (N)"><svg class="ic"><use href="#i-note"/></svg></button>
+  <button class="tool" data-tool="text" data-tip="Texte  (T)"><svg class="ic"><use href="#i-text"/></svg></button>
+  <button class="tool" data-tool="zone" data-tip="Zone (regroupe)  (Z)"><svg class="ic"><use href="#i-zone"/></svg></button>
+  <span class="tsep"></span>
+  <button class="tool" id="btn-wire" data-tip="Style des nouveaux fils : courbe"><svg class="ic"><use href="#i-curve"/></svg></button>
+</nav>
+
+<!-- Zoom -->
+<div class="zoombar glass">
+  <button class="ib" id="btn-zout" title="Dézoomer (-)" aria-label="Dézoomer"><svg class="ic"><use href="#i-minus"/></svg></button>
+  <button class="zval" id="btn-z100" title="Revenir à 100 %">100 %</button>
+  <button class="ib" id="btn-zin" title="Zoomer (+)" aria-label="Zoomer"><svg class="ic"><use href="#i-plus"/></svg></button>
+  <button class="ib" id="btn-fit" title="Tout voir (F)" aria-label="Tout voir"><svg class="ic"><use href="#i-fit"/></svg></button>
+  <button class="ib" id="btn-search" title="Rechercher (Ctrl+F)" aria-label="Rechercher"><svg class="ic"><use href="#i-search"/></svg></button>
+  <button class="ib" id="btn-map" title="Mini-carte" aria-label="Mini-carte"><svg class="ic"><use href="#i-map"/></svg></button>
+  <button class="ib edit-only on" id="btn-snap" title="Magnétisme de la grille" aria-label="Magnétisme de la grille"><svg class="ic"><use href="#i-grid"/></svg></button>
+</div>
+
+<!-- Mini-carte -->
+<canvas id="minimap" class="minimap glass" hidden aria-label="Mini-carte : cliquez pour vous déplacer"></canvas>
+
+<!-- Recherche -->
+<div id="search" class="search glass" hidden>
+  <svg class="ic"><use href="#i-search"/></svg>
+  <input id="search-input" placeholder="Rechercher une scène, un texte…" autocomplete="off" spellcheck="false">
+  <span id="search-count" class="search-count"></span>
+  <button class="ib" id="search-prev" aria-label="Résultat précédent"><svg class="ic"><use href="#i-left"/></svg></button>
+  <button class="ib" id="search-next" aria-label="Résultat suivant"><svg class="ic"><use href="#i-right"/></svg></button>
+  <button class="ib" id="search-close" aria-label="Fermer la recherche"><svg class="ic"><use href="#i-x"/></svg></button>
+</div>
+
+<!-- Mise en forme du texte -->
+<div id="fmt" class="fmt glass" hidden></div>
+
+<!-- Propriétés de la sélection -->
+<aside id="inspector" class="glass edit-only" hidden aria-label="Propriétés"></aside>
+
+<!-- Astuce de démarrage -->
+<div id="tip" class="tip glass edit-only" hidden>
+  <p><b>Astuce</b> : glissez depuis un point <span class="dot"></span> pour tracer un fil, ou cliquez dessus pour créer la scène suivante. Collez un lien TikTok, Instagram ou Facebook (Ctrl+V) pour ajouter la vidéo.</p>
+  <button class="ib" id="tip-close" aria-label="Fermer l'astuce"><svg class="ic"><use href="#i-x"/></svg></button>
+</div>
+
+<!-- Présentation -->
+<div id="hud" class="hud glass" hidden>
+  <div class="hud-choices" id="hud-choices"></div>
+  <div class="hud-row">
+    <button class="ib" id="hud-prev" aria-label="Précédent"><svg class="ic"><use href="#i-left"/></svg></button>
+    <div class="hud-info"><span id="hud-count"></span><span id="hud-title"></span></div>
+    <button class="ib" id="hud-next" aria-label="Suivant"><svg class="ic"><use href="#i-right"/></svg></button>
+    <button class="ib" id="hud-close" aria-label="Quitter la présentation"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+</div>
+
+<!-- Vue liste -->
+<section id="listview" class="listview" hidden aria-label="Vue liste">
+  <div class="lv-bar">
+    <div class="lv-head"><h1 id="lv-title"></h1><p id="lv-sub"></p></div>
+    <div class="lv-actions">
+      <button class="btn ghost" id="lv-csv" title="Liste de tournage pour Excel / Google Sheets"><svg class="ic"><use href="#i-table"/></svg><span class="lbl">Tableau (CSV)</span></button>
+      <button class="btn ghost" id="lv-print"><svg class="ic"><use href="#i-print"/></svg><span class="lbl">Imprimer / PDF</span></button>
+      <button class="ib" id="lv-close" aria-label="Fermer la liste"><svg class="ic"><use href="#i-x"/></svg></button>
+    </div>
+  </div>
+  <div class="lv-items" id="lv-items"></div>
+</section>
+
+<!-- Mes storyboards -->
+<div id="drawer-scrim" class="scrim" hidden></div>
+<aside id="drawer" class="drawer glass" aria-label="Mes storyboards">
+  <div class="dr-head">
+    <h2>Mes storyboards</h2>
+    <button class="ib" id="dr-close" aria-label="Fermer"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="dr-actions">
+    <button class="btn primary" id="dr-new"><svg class="ic"><use href="#i-plus"/></svg><span>Nouveau</span></button>
+    <button class="btn ghost" id="dr-import"><svg class="ic"><use href="#i-upload"/></svg><span>Ouvrir un fichier</span></button>
+  </div>
+  <div class="dr-list" id="dr-list"></div>
+  <div class="dr-foot">
+    <button class="btn ghost sm" id="dr-export"><svg class="ic"><use href="#i-download"/></svg><span>Sauvegarder ce projet (.json)</span></button>
+    <button class="btn ghost sm" id="dr-theme"><svg class="ic"><use href="#i-moon"/></svg><span id="dr-theme-lbl">Thème</span></button>
+    <details class="help">
+      <summary><svg class="ic"><use href="#i-help"/></svg>Raccourcis et gestes</summary>
+      <ul>
+        <li><b>Glisser le fond</b> : se déplacer · <b>Molette / pincer</b> : zoomer</li>
+        <li><b>Maj + glisser</b> : sélectionner plusieurs éléments</li>
+        <li><b>Point ●</b> : glisser pour relier, cliquer pour créer la suite</li>
+        <li><b>Double-clic</b> : écrire dans un élément · sur le fond : ajouter</li>
+        <li><b>Ctrl+V</b> : coller un lien vidéo, une image ou du texte</li>
+        <li><b>Ctrl+Z / Ctrl+Y</b> : annuler / rétablir · <b>Ctrl+D</b> : dupliquer</li>
+        <li><b>Ctrl+B / I / U</b> : gras, italique, souligné pendant l'écriture</li>
+        <li><b>Ctrl+F</b> : rechercher · <b>Entrée</b> : écrire dans l'élément sélectionné</li>
+        <li><b>Suppr</b> : effacer · <b>F</b> : tout voir · <b>Espace + glisser</b> : se déplacer</li>
+      </ul>
+    </details>
+    <p class="dr-note">Vos storyboards restent dans ce navigateur. Sauvegardez-les en .json pour les garder ailleurs.</p>
+  </div>
+</aside>
+
+<!-- Ajouter un lien -->
+<dialog id="dlg-link" class="dlg">
+  <form method="dialog" id="link-form">
+    <h2>Ajouter une vidéo par lien</h2>
+    <p class="muted">TikTok, Instagram (reels et posts), Facebook, YouTube, Vimeo, Google Drive, ou l'adresse directe d'une image ou d'une vidéo.</p>
+    <input id="link-input" type="url" inputmode="url" placeholder="Collez le lien ici…" autocomplete="off" spellcheck="false">
+    <div id="link-detect" class="detect"></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" data-close>Annuler</button>
+      <button type="submit" class="btn primary" id="link-ok">Ajouter</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Partager -->
+<dialog id="dlg-share" class="dlg wide">
+  <div class="dlg-top">
+    <h2>Partager l'aperçu</h2>
+    <button class="ib" data-close aria-label="Fermer"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <section class="share-block">
+    <h3>Lien de consultation</h3>
+    <p class="muted">La personne ouvre le lien et voit le storyboard en lecture seule : vidéos, fils, présentation et vue liste. Rien à installer.</p>
+    <div class="copyrow"><input id="share-url" readonly><button class="btn primary" id="share-copy">Copier</button></div>
+    <div class="share-btns">
+      <button class="btn ghost sm" id="share-native" hidden><svg class="ic"><use href="#i-share"/></svg><span>Envoyer…</span></button>
+      <a class="btn ghost sm" id="share-wa" target="_blank" rel="noopener"><svg class="ic"><use href="#i-chat"/></svg><span>WhatsApp</span></a>
+      <a class="btn ghost sm" id="share-mail"><svg class="ic"><use href="#i-mail"/></svg><span>E-mail</span></a>
+      <a class="btn ghost sm" id="share-open" target="_blank" rel="noopener"><svg class="ic"><use href="#i-external"/></svg><span>Voir l'aperçu</span></a>
+    </div>
+    <p id="share-info" class="share-info"></p>
+  </section>
+  <section class="share-block">
+    <h3>Fichier d'aperçu</h3>
+    <p class="muted">Un seul fichier .html qui contient tout, même les images et vidéos importées depuis l'appareil. À envoyer par e-mail, WhatsApp ou WeTransfer : il s'ouvre dans n'importe quel navigateur.</p>
+    <button class="btn ghost" id="share-html"><svg class="ic"><use href="#i-download"/></svg><span>Télécharger le fichier d'aperçu</span></button>
+  </section>
+  <section class="share-block">
+    <h3>Projet modifiable</h3>
+    <p class="muted">Pour qu'une autre personne modifie le storyboard : elle l'ouvre avec « Mes storyboards › Ouvrir un fichier ».</p>
+    <button class="btn ghost" id="share-json"><svg class="ic"><use href="#i-download"/></svg><span>Télécharger le projet (.json)</span></button>
+  </section>
+</dialog>
+
+<!-- Nouveau storyboard -->
+<dialog id="dlg-new" class="dlg wide">
+  <form method="dialog" id="new-form">
+    <div class="dlg-top">
+      <h2>Nouveau storyboard</h2>
+      <button type="button" class="ib" data-close aria-label="Fermer"><svg class="ic"><use href="#i-x"/></svg></button>
+    </div>
+    <input id="new-title" placeholder="Nom du storyboard" maxlength="120">
+    <div class="tpl-grid" id="tpl-grid">
+      <label class="tpl"><input type="radio" name="tpl" value="blank" checked><span class="tpl-card"><b>Vierge</b><small>Un plan de travail vide.</small></span></label>
+      <label class="tpl"><input type="radio" name="tpl" value="story"><span class="tpl-card"><b>Storyboard vidéo</b><small>Accroche, problème, solution, preuve, appel à l'action.</small></span></label>
+      <label class="tpl"><input type="radio" name="tpl" value="process"><span class="tpl-card"><b>Process</b><small>Début, étapes, décision oui / non, fin.</small></span></label>
+      <label class="tpl"><input type="radio" name="tpl" value="social"><span class="tpl-card"><b>Parcours réseaux sociaux</b><small>Vidéos TikTok, Instagram, Facebook vers une page de vente.</small></span></label>
+    </div>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" data-close>Annuler</button>
+      <button type="submit" class="btn primary">Créer</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Confirmation -->
+<dialog id="dlg-confirm" class="dlg">
+  <form method="dialog">
+    <p id="confirm-msg"></p>
+    <div class="dlg-actions">
+      <button value="no" class="btn ghost">Annuler</button>
+      <button value="yes" class="btn danger" id="confirm-yes">Supprimer</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Lecteur agrandi -->
+<div id="lightbox" class="lightbox" hidden>
+  <button class="ib lb-close" id="lb-close" aria-label="Fermer le lecteur"><svg class="ic"><use href="#i-x"/></svg></button>
+  <div class="lb-box">
+    <div class="lb-media" id="lb-media"></div>
+    <div class="lb-cap"><span id="lb-title"></span><a id="lb-open" target="_blank" rel="noopener" hidden><svg class="ic"><use href="#i-external"/></svg>Ouvrir l'original</a></div>
+  </div>
+</div>
+
+<div id="menu" class="menu glass" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="dropzone" class="dropzone" hidden><p>Déposez vos images et vidéos</p></div>
+<input type="file" id="file-media" accept="image/*,video/*" multiple hidden>
+<input type="file" id="file-project" accept=".json,application/json" hidden>
+
+<script src="storyboard.js"></script>
+</body>
+</html>
