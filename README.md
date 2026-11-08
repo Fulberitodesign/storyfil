@@ -2,7 +2,16 @@
 
 Storyboards et process reliés par des fils, avec images, vidéos et vidéos TikTok / Instagram / Facebook lisibles directement dans le plan de travail. Un lien suffit pour montrer l'aperçu à quelqu'un.
 
-Adresse une fois publié : **https://fulberitodesign.github.io/storyfil/**
+[![Ouvrir Storyfil](https://img.shields.io/badge/Ouvrir-Storyfil-22d3ee?style=for-the-badge)](https://fulberitodesign.github.io/storyfil/)
+
+## Accès rapide
+
+| | Lien |
+| --- | --- |
+| **Ouvrir l'outil** | https://fulberitodesign.github.io/storyfil/ |
+| Code (ce dépôt) | https://github.com/Fulberitodesign/storyfil |
+| Mise en ligne (GitHub Pages) | https://github.com/Fulberitodesign/storyfil/settings/pages |
+| Historique des mises à jour | https://github.com/Fulberitodesign/storyfil/commits/main |
 
 ## Ce que fait l'outil
 
@@ -25,6 +34,8 @@ Adresse une fois publié : **https://fulberitodesign.github.io/storyfil/**
 **Outils de storyboard**
 - Pour chaque scène : plan (gros plan, plan large…), mouvement de caméra, transition, son / voix off / dialogue, durée, statut (À faire, En cours, Tourné, Monté, Validé), format du cadre (16:9, 9:16, 1:1, 4:5).
 - Numérotation automatique des scènes dans l'ordre du parcours, durée totale et timecodes.
+- **Outil sélection** (touche V) : glisser sur le fond pour entourer plusieurs éléments, aussi au doigt sur mobile. **Main** (touche H) : glisser le fond pour se déplacer.
+- **Retirer les fils** : tous en un clic (bouton des outils, ou clic droit sur le fond), ceux d'une sélection, ou seulement ceux entre les éléments sélectionnés. Chaque retrait peut être annulé.
 - Aligner, répartir, ranger en ligne / en grille / en suivant les fils, relier une sélection dans l'ordre, entourer d'une zone, verrouiller, premier plan / arrière-plan, dupliquer, copier-coller.
 - Recherche (Ctrl+F), annuler / rétablir, modèles de départ (storyboard vidéo, process, parcours réseaux sociaux).
 

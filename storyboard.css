@@ -75,6 +75,7 @@ body.view .edit-only,body.edit .view-only{display:none !important}
 /* ---------- Plan de travail ---------- */
 #stage{position:fixed;inset:0;overflow:hidden;touch-action:none;background-color:var(--bg);background-image:radial-gradient(circle,var(--dot) 1.15px,transparent 1.35px);user-select:none;-webkit-user-select:none;cursor:default}
 #stage.panning,body.space #stage{cursor:grab}
+#stage.selecting{cursor:crosshair}
 #stage.panning:active{cursor:grabbing}
 #world{position:absolute;left:0;top:0;transform-origin:0 0}
 #zones,#labels,#nodes{position:absolute;left:0;top:0}
@@ -244,9 +245,11 @@ body.view .e-label{cursor:default}
 .sep{width:1px;height:22px;background:var(--edge);margin:0 4px}
 
 /* ---------- Outils ---------- */
-.tools{position:fixed;z-index:15;left:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:2px;padding:6px;border-radius:16px}
+.tools{position:fixed;z-index:15;left:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:2px;padding:6px;border-radius:16px;max-height:calc(100% - 96px);overflow-y:auto;scrollbar-width:none}
+.tools::-webkit-scrollbar{display:none}
 .tool{width:42px;height:42px;display:grid;place-items:center;border:0;border-radius:11px;background:transparent;color:var(--text-2);cursor:pointer;position:relative;padding:0;touch-action:none}
 .tool:hover{background:var(--soft);color:var(--fg)}
+.tool.on{background:var(--accent-soft);color:var(--accent)}
 .tool:active{transform:scale(.94)}
 .tool .ic{width:20px;height:20px}
 .tsep{height:1px;background:var(--edge);margin:4px 6px;flex:none}
@@ -444,6 +447,9 @@ body.presenting .node.current{outline:2px solid var(--accent);outline-offset:6px
 /* ---------- Divers ---------- */
 .toast{position:fixed;z-index:80;left:50%;bottom:84px;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:var(--panel-solid);color:var(--fg);border:1px solid var(--edge);box-shadow:var(--shadow);padding:10px 16px;border-radius:12px;font:500 13px var(--f-body);transition:opacity .2s,transform .2s;max-width:calc(100% - 32px);text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+.toast.has-act.on{pointer-events:auto;display:flex;align-items:center;gap:12px}
+.toast .t-act{border:0;background:none;color:var(--accent);font:700 13px var(--f-body);cursor:pointer;padding:2px 4px;border-radius:6px}
+.toast .t-act:hover{background:var(--accent-soft)}
 .dropzone{position:fixed;inset:10px;z-index:75;border:2px dashed var(--accent);border-radius:22px;background:color-mix(in srgb,var(--accent) 10%,transparent);display:grid;place-items:center;pointer-events:none}
 .dropzone p{font:600 18px var(--f-display);color:var(--accent);background:var(--panel-solid);padding:12px 20px;border-radius:14px;box-shadow:var(--shadow)}
 .broken{position:fixed;inset:0;display:grid;place-items:center;text-align:center;padding:24px}

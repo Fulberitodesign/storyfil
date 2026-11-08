@@ -85,7 +85,13 @@ function sv(tag, attrs) { const el = document.createElementNS(NS, tag); for (con
 function icon(name) { const el = sv('svg', { class: 'ic', 'aria-hidden': 'true' }); el.append(sv('use', { href: '#i-' + name })); return el; }
 function btn(ic, label, onclick, cls = 'ib') { return h('button', { class: cls, type: 'button', title: label, 'aria-label': label, onclick }, icon(ic)); }
 let toastT = 0;
-function toast(msg, ms = 2800) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), ms); }
+function toast(msg, ms = 2800, act) {
+  const t = $('#toast');
+  t.replaceChildren(h('span', { text: msg }));
+  if (act) t.append(h('button', { class: 't-act', type: 'button', onclick: () => { t.classList.remove('on'); act.fn(); } }, act.label));
+  t.classList.toggle('has-act', !!act); t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), ms);
+}
 function download(blob, name) { const url = URL.createObjectURL(blob); const a = h('a', { href: url, download: name }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 10000); }
 
 /* ---------------- Stockage hors ligne (IndexedDB) ---------------- */
@@ -328,7 +334,8 @@ const S = {
   sel: new Set(), edge: null, active: null,
   snap: lsGet('sf-snap') !== '0', wire: ['curve', 'straight', 'step'].includes(lsGet('sf-wire')) ? lsGet('sf-wire') : 'curve',
   hist: [], hi: 0,
-  present: null, clip: null, editing: null, search: null, lb: null, fmtBusy: false
+  present: null, clip: null, editing: null, search: null, lb: null, fmtBusy: false,
+  tool: 'hand'             // 'hand' : glisser le fond déplace · 'select' : glisser le fond entoure des éléments
 };
 const els = new Map();     // id → élément affiché
 const sizes = new Map();   // id → taille mesurée {w, h}
@@ -760,7 +767,7 @@ function onDown(e) {
     return;
   }
   if (S.editing) endEdit(true);
-  if (e.shiftKey) { drag = { type: 'marquee', sx: e.clientX, sy: e.clientY, base: new Set(S.sel) }; return; }
+  if (e.shiftKey || S.tool === 'select') { drag = { type: 'marquee', sx: e.clientX, sy: e.clientY, base: e.shiftKey ? new Set(S.sel) : new Set(), add: e.shiftKey }; return; }
   startPan(e, { clear: true });
 }
 function startPan(e, o) { cancelAnimationFrame(animId); drag = { type: 'pan', sx: e.clientX, sy: e.clientY, vx: S.view.x, vy: S.view.y, ...o }; W.stage.classList.add('panning'); }
@@ -883,7 +890,10 @@ function onUp(e, cancel) {
       if (d.target) { if (connect(d.from.id, d.target.id, d.side, d.tside)) commit(); }
       else quickMenu(e.clientX, e.clientY, toWorld(e.clientX, e.clientY), { from: d.from, side: d.side });
       break;
-    case 'marquee': W.marquee.hidden = true; syncSel(); break;
+    case 'marquee':
+      W.marquee.hidden = true;
+      if (!d.moved && !d.add) clearSel(); else syncSel();
+      break;
   }
 }
 function endDrag() {
@@ -941,7 +951,9 @@ function onContext(e) {
     if (n.type === 'scene') items.push(n.media ? ['expand', 'Agrandir le média', () => openLightbox(n)] : ['image', 'Ajouter un média…', () => mediaChooser(n, e.clientX, e.clientY)]);
     items.push(['copy', 'Dupliquer', duplicateSel], ['front', 'Premier plan', () => reorder(1)], ['front', 'Arrière-plan', () => reorder(-1)],
       ['lock', n.lock ? 'Déverrouiller' : 'Verrouiller', () => { for (const id of S.sel) { const m = byId(id); if (m) m.lock = !n.lock || undefined; } commit(); }],
-      ['play', 'Présenter à partir d’ici', () => startPresent(n.id)], 'sep', ['trash', 'Supprimer', deleteSel, 'danger']);
+      ['play', 'Présenter à partir d’ici', () => startPresent(n.id)],
+      touching(S.sel).length ? ['unlink', `Retirer les fils (${touching(S.sel).length})`, () => unlinkSel(false)] : null,
+      'sep', ['trash', 'Supprimer', deleteSel, 'danger']);
     showMenu(e.clientX, e.clientY, items);
   } else if (edgeEl) {
     const id = edgeEl.dataset.edge, ed = S.board.edges.find(x => x.id === id); if (!ed) return;
@@ -989,7 +1001,9 @@ function quickMenu(cx, cy, p, link) {
     ['link', 'Vidéo par lien…', () => openLinkDialog({ p, link })],
     ['upload', 'Image / vidéo de l’appareil…', () => pickFiles({ p, link })],
     !link && S.clip ? 'sep' : null, !link && S.clip ? ['copy', 'Coller ici', () => pasteNodes(S.clip, p)] : null,
-    !link ? 'sep' : null, !link ? ['layout', 'Ranger tout le parcours', () => arrangeFlow()] : null, !link ? ['fit', 'Tout voir', () => fit()] : null
+    !link ? 'sep' : null, !link ? ['layout', 'Ranger tout le parcours', () => arrangeFlow()] : null, !link ? ['fit', 'Tout voir', () => fit()] : null,
+    !link ? ['select', S.tool === 'select' ? 'Revenir à la main' : 'Outil sélection', () => setTool(S.tool === 'select' ? 'hand' : 'select')] : null,
+    !link && S.board.edges.length ? ['unlink', `Retirer tous les fils (${S.board.edges.length})`, unlinkAll, 'danger'] : null
   ]);
 }
 function mediaChooser(n, x, y) {
@@ -1186,6 +1200,37 @@ function wrapZone() {
   S.sel = new Set([z.id]); S.edge = null;
   commit();
   startEdit(z, 'title');
+}
+/* ---------------- Retrait des fils ---------------- */
+const touching = ids => S.board.edges.filter(e => ids.has(e.from) || ids.has(e.to));
+const between = ids => S.board.edges.filter(e => ids.has(e.from) && ids.has(e.to));
+const plural = (n, w) => `${n} ${w}${n > 1 ? 's' : ''}`;
+function removeEdges(list, msg) {
+  if (!list.length) { toast('Aucun fil à retirer'); return; }
+  const gone = new Set(list.map(e => e.id));
+  S.board.edges = S.board.edges.filter(e => !gone.has(e.id));
+  if (S.edge && gone.has(S.edge)) S.edge = null;
+  commit(); renderInspector(true);
+  toast(msg || plural(list.length, 'fil') + ' retiré' + (list.length > 1 ? 's' : ''), 6000, { label: 'Annuler', fn: undo });
+}
+const unlinkAll = () => removeEdges(S.board.edges.slice(), S.board.edges.length > 1 ? `Les ${S.board.edges.length} fils ont été retirés` : null);
+const unlinkSel = only => removeEdges(only ? between(S.sel) : touching(S.sel));
+/* Bouton des outils : sans sélection, retire tous les fils en un clic ; avec une sélection, propose le choix */
+function unlinkMenu(btnEl) {
+  if (S.editing) endEdit(true);
+  if (!S.board.edges.length) { toast('Aucun fil sur ce storyboard'); return; }
+  if (!S.sel.size) { unlinkAll(); return; }
+  const r = btnEl.getBoundingClientRect(), a = touching(S.sel).length, b = between(S.sel).length, k = S.sel.size;
+  showMenu(r.right + 8, r.top, [
+    ['unlink', `Fils de la sélection (${a})`, () => unlinkSel(false)],
+    k > 1 ? ['chain', `Seulement entre les éléments sélectionnés (${b})`, () => unlinkSel(true)] : null,
+    'sep', ['trash', `Tous les fils du storyboard (${S.board.edges.length})`, unlinkAll, 'danger']
+  ]);
+}
+function setTool(t) {
+  S.tool = t === 'select' ? 'select' : 'hand';
+  for (const [id, v] of [['#tool-hand', 'hand'], ['#tool-select', 'select']]) { const b = $(id); b.classList.toggle('on', S.tool === v); b.setAttribute('aria-pressed', S.tool === v); }
+  W.stage.classList.toggle('selecting', S.tool === 'select');
 }
 function deleteSel() {
   if (S.edge) { S.board.edges = S.board.edges.filter(e => e.id !== S.edge); S.edge = null; commit(); return; }
@@ -1400,7 +1445,10 @@ function nodePanel(n) {
   }
   out.push(fieldBox(n.type === 'text' ? 'Couleur du texte' : 'Couleur', swatches(n.color, c => { if (c) n.color = c; else delete n.color; commit(); }, n.type === 'text')));
   if (n.type === 'zone') out.push(h('p', { class: 'hint', text: 'Déplacez la zone par son étiquette : tout ce qu’elle contient suit.' }));
-  if (n.type !== 'zone' && n.type !== 'text') out.push(h('div', { class: 'acts' }, h('button', { class: 'btn sm', type: 'button', onclick: () => startPresent(n.id) }, icon('play'), h('span', { text: 'Présenter d’ici' }))));
+  const own = touching(new Set([n.id])).length;
+  if (n.type !== 'zone') out.push(h('div', { class: 'acts' },
+    n.type !== 'text' ? h('button', { class: 'btn sm', type: 'button', onclick: () => startPresent(n.id) }, icon('play'), h('span', { text: 'Présenter d’ici' })) : null,
+    own ? h('button', { class: 'btn sm', type: 'button', onclick: () => unlinkSel(false) }, icon('unlink'), h('span', { text: `Retirer ses fils (${own})` })) : null));
   return out;
 }
 function mediaPanel(n) {
@@ -1440,7 +1488,10 @@ function multiPanel() {
       h('button', { class: 'btn sm', type: 'button', onclick: () => arrangeFlow([...S.sel]) }, icon('layout'), h('span', { text: 'Suivre les fils' })))),
     fieldBox('Relier', h('div', { class: 'acts' },
       h('button', { class: 'btn sm', type: 'button', onclick: chainSel }, icon('chain'), h('span', { text: 'Relier dans l’ordre' })),
-      h('button', { class: 'btn sm', type: 'button', onclick: wrapZone }, icon('zone'), h('span', { text: 'Entourer d’une zone' }))))
+      h('button', { class: 'btn sm', type: 'button', onclick: wrapZone }, icon('zone'), h('span', { text: 'Entourer d’une zone' })))),
+    fieldBox('Retirer des fils', h('div', { class: 'acts' },
+      h('button', { class: 'btn sm', type: 'button', disabled: !touching(S.sel).length, onclick: () => unlinkSel(false) }, icon('unlink'), h('span', { text: `Tous leurs fils (${touching(S.sel).length})` })),
+      h('button', { class: 'btn sm', type: 'button', disabled: !between(S.sel).length, onclick: () => unlinkSel(true) }, icon('unlink'), h('span', { text: `Entre eux (${between(S.sel).length})` }))))
   ];
 }
 function edgePanel() {
@@ -2111,6 +2162,7 @@ function onKey(e) {
     edgesLater(); nudgeCommit();
   } else if (k === 'Enter' && S.sel.size === 1) { e.preventDefault(); const n = byId([...S.sel][0]); startEdit(n, n.type === 'scene' || n.type === 'zone' ? 'title' : 'text'); }
   else if (!mod && !e.altKey) {
+    if (low === 'v' || low === 'h') { e.preventDefault(); setTool(low === 'v' ? 'select' : 'hand'); return; }
     const tool = { s: 'scene', l: 'link', i: 'file', e: 'step', d: 'decision', n: 'note', t: 'text', z: 'zone' }[low];
     if (tool) { e.preventDefault(); useTool(tool); }
   }
@@ -2231,6 +2283,9 @@ function bindUI() {
   for (const [id, list] of [['dl-shot', SHOTS], ['dl-move', MOVES], ['dl-trans', TRANS]]) document.body.append(h('datalist', { id }, ...list.map(v => h('option', { value: v }))));
 
   $('#btn-undo').onclick = undo; $('#btn-redo').onclick = redo;
+  $('#tool-hand').onclick = () => setTool('hand');
+  $('#tool-select').onclick = () => { setTool('select'); if (lsGet('sf-seltip') !== '1') { lsSet('sf-seltip', '1'); toast('Outil sélection : glissez sur le fond pour entourer plusieurs éléments', 4000); } };
+  $('#btn-unlink').onclick = e => unlinkMenu(e.currentTarget);
   $('#btn-present').onclick = () => S.present ? stopPresent() : startPresent();
   $('#btn-list').onclick = openList;
   $('#btn-share').onclick = openShare;
